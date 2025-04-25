@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes avis - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('user_profile') }}">Mon profil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mes avis</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Mes avis sur les livres</h1>
+
+    {% if reviews is empty %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>Vous n'avez pas encore publié d'avis sur les livres.
+        </div>
+        <p class="mt-3">
+            <a href="{{ path('book_index') }}" class="btn btn-primary">
+                <i class="fas fa-search me-2"></i>Parcourir le catalogue
+            </a>
+        </p>
+    {% else %}
+        <div class="row">
+            {% for review in reviews %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <a href="{{ path('book_show', {'id': review.book.id}) }}">
+                                <strong>{{ review.book.title }}</strong>
+                            </a>
+                            <div>
+                                {% for i in 1..5 %}
+                                    <i class="fas fa-star {% if i <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            {% if review.comment %}
+                                <p class="card-text">{{ review.comment|nl2br }}</p>
+                            {% else %}
+                                <p class="text-muted">Aucun commentaire</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Publié le {{ review.createdAt|date('d/m/Y') }}</small>
+                            <span class="badge {% if review.status == 'approved' %}bg-success{% elseif review.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ review.status == 'approved' ? 'Approuvé' : (review.status == 'pending' ? 'En attente' : 'Rejeté') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

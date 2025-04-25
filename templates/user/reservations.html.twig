@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes réservations - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('user_profile') }}">Mon profil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Mes réservations</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Mes réservations</h1>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Réservations en cours</h5>
+        </div>
+        <div class="card-body">
+            {% set activeReservations = reservations|filter(r => r.status == 'active' or r.status == 'pending') %}
+            
+            {% if activeReservations is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Vous n'avez aucune réservation active.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Livre</th>
+                                <th>Date de réservation</th>
+                                <th>Statut</th>
+                                <th>Date de retour prévue</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in activeReservations %}
+                                <tr class="{% if reservation.isOverdue %}table-danger{% endif %}">
+                                    <td>
+                                        <a href="{{ path('book_show', {'id': reservation.book.id}) }}">
+                                            {{ reservation.book.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ reservation.reservationDate|date('d/m/Y') }}</td>
+                                    <td>
+                                        {% if reservation.status == 'pending' %}
+                                            <span class="badge bg-warning">En attente</span>
+                                        {% elseif reservation.status == 'active' %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reservation.dueDate %}
+                                            {{ reservation.dueDate|date('d/m/Y') }}
+                                            {% if reservation.isOverdue %}
+                                                <span class="badge bg-danger">En retard</span>
+                                            {% endif %}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('user_reservation_cancel', {'id': reservation.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
+                                            <i class="fas fa-times me-1"></i>Annuler
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Historique des réservations</h5>
+        </div>
+        <div class="card-body">
+            {% set pastReservations = reservations|filter(r => r.status == 'returned' or r.status == 'cancelled') %}
+            
+            {% if pastReservations is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Vous n'avez aucun historique de réservation.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Livre</th>
+                                <th>Date de réservation</th>
+                                <th>Statut</th>
+                                <th>Date de retour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in pastReservations %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('book_show', {'id': reservation.book.id}) }}">
+                                            {{ reservation.book.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ reservation.reservationDate|date('d/m/Y') }}</td>
+                                    <td>
+                                        {% if reservation.status == 'returned' %}
+                                            <span class="badge bg-info">Retourné</span>
+                                        {% elseif reservation.status == 'cancelled' %}
+                                            <span class="badge bg-danger">Annulé</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if reservation.returnDate %}
+                                            {{ reservation.returnDate|date('d/m/Y') }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modération des avis - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modération des avis</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Modération des avis</h1>
+
+    <div class="mb-4">
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Avis en attente de modération</h5>
+        </div>
+        <div class="card-body">
+            {% if reviews is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun avis en attente de modération.
+                </div>
+            {% else %}
+                <div class="row">
+                    {% for review in reviews %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ review.user.fullName }}</strong> sur 
+                                        <a href="{{ path('book_show', {'id': review.book.id}) }}">
+                                            {{ review.book.title }}
+                                        </a>
+                                    </div>
+                                    <div>
+                                        {% for i in 1..5 %}
+                                            <i class="fas fa-star {% if i <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    {% if review.comment %}
+                                        <p class="card-text">{{ review.comment|nl2br }}</p>
+                                    {% else %}
+                                        <p class="text-muted">Aucun commentaire</p>
+                                    {% endif %}
+                                    <p class="text-muted small">Publié le {{ review.createdAt|date('d/m/Y à H:i') }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ path('admin_review_approve', {'id': review.id}) }}" class="btn btn-success">
+                                            <i class="fas fa-check me-2"></i>Approuver
+                                        </a>
+                                        <a href="{{ path('admin_review_reject', {'id': review.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir rejeter cet avis ?')">
+                                            <i class="fas fa-times me-2"></i>Rejeter
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

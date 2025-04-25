@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">Contactez-nous</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Formulaire de contact</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Adresse e-mail</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Sujet</label>
+                            <select class="form-select" id="subject" required>
+                                <option value="">Sélectionnez un sujet</option>
+                                <option value="question">Question générale</option>
+                                <option value="suggestion">Suggestion</option>
+                                <option value="problem">Signaler un problème</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Envoyer le message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Nos coordonnées</h5>
+                </div>
+                <div class="card-body">
+                    <h6><i class="fas fa-map-marker-alt me-2 text-primary"></i>Adresse</h6>
+                    <p>123 Rue de la Bibliothèque<br>75001 Paris<br>France</p>
+
+                    <h6><i class="fas fa-phone me-2 text-primary"></i>Téléphone</h6>
+                    <p>(+33) 01 23 45 67 89</p>
+
+                    <h6><i class="fas fa-envelope me-2 text-primary"></i>Email</h6>
+                    <p>contact@bibliotheque.fr</p>
+
+                    <h6><i class="fas fa-clock me-2 text-primary"></i>Horaires d'ouverture</h6>
+                    <p>
+                        Lundi - Vendredi: 9h - 18h<br>
+                        Mercredi: 9h - 20h<br>
+                        Samedi: 10h - 17h<br>
+                        Dimanche: Fermé
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Localisation</h5>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Placeholder pour une carte -->
+                    <div class="bg-light text-center py-5">
+                        <i class="fas fa-map fa-4x text-muted mb-3"></i>
+                        <p class="mb-0">Carte de localisation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Questions fréquentes</h5>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="accordionFAQ">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Comment puis-je m'inscrire à la bibliothèque ?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Pour vous inscrire à la bibliothèque, il suffit de créer un compte sur notre site en cliquant sur "Inscription" dans le menu. Vous devrez fournir quelques informations personnelles et accepter les conditions d'utilisation.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Comment réserver un livre ?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Pour réserver un livre, connectez-vous à votre compte, recherchez le livre souhaité dans notre catalogue, puis cliquez sur le bouton "Réserver". Vous recevrez une confirmation de réservation et pourrez ensuite venir chercher le livre à la bibliothèque.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Quelle est la durée de prêt des livres ?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            La durée standard de prêt est de 14 jours. Vous pouvez suivre vos emprunts et leurs dates d'échéance dans votre espace personnel. Des pénalités peuvent s'appliquer en cas de retard de retour.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Comment puis-je laisser un avis sur un livre ?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionFAQ">
+                        <div class="accordion-body">
+                            Pour laisser un avis, rendez-vous sur la page du livre concerné et cliquez sur "Laisser un avis". Vous pourrez attribuer une note et rédiger un commentaire. Votre avis sera soumis à modération avant d'être publié.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

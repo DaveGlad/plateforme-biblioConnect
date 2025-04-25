@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">Mon Profil</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Informations personnelles</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Nom complet :</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+                    <p><strong>Email :</strong> {{ app.user.email }}</p>
+                    <p><strong>Rôle :</strong> 
+                        {% if app.user.isAdmin %}
+                            Administrateur
+                        {% elseif app.user.isLibrarian %}
+                            Bibliothécaire
+                        {% else %}
+                            Utilisateur
+                        {% endif %}
+                    </p>
+                    <a href="{{ path('user_profile_edit') }}" class="btn btn-primary w-100">
+                        <i class="fas fa-edit me-2"></i>Modifier mon profil
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Mes réservations</h5>
+                    <a href="{{ path('user_reservations') }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-list me-1"></i>Voir tout
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% set activeReservations = app.user.reservations|filter(r => r.status == 'active' or r.status == 'pending') %}
+                    
+                    {% if activeReservations is empty %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>Vous n'avez aucune réservation active.
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Livre</th>
+                                        <th>Date de réservation</th>
+                                        <th>Statut</th>
+                                        <th>Date de retour</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for reservation in activeReservations|slice(0, 5) %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('book_show', {'id': reservation.book.id}) }}">
+                                                    {{ reservation.book.title }}
+                                                </a>
+                                            </td>
+                                            <td>{{ reservation.reservationDate|date('d/m/Y') }}</td>
+                                            <td>
+                                                {% if reservation.status == 'pending' %}
+                                                    <span class="badge bg-warning">En attente</span>
+                                                {% elseif reservation.status == 'active' %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if reservation.dueDate %}
+                                                    {{ reservation.dueDate|date('d/m/Y') }}
+                                                    {% if reservation.isOverdue %}
+                                                        <span class="badge bg-danger">En retard</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('user_reservation_cancel', {'id': reservation.id}) }}" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Mes avis</h5>
+                    <a href="{{ path('user_reviews') }}" class="btn btn-sm btn-light">
+                        <i class="fas fa-list me-1"></i>Voir tout
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% set reviews = app.user.reviews|slice(0, 3) %}
+                    
+                    {% if reviews is empty %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>Vous n'avez pas encore publié d'avis.
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            {% for review in reviews %}
+                                <div class="col-md-12 mb-3">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <a href="{{ path('book_show', {'id': review.book.id}) }}">
+                                                <strong>{{ review.book.title }}</strong>
+                                            </a>
+                                            <div>
+                                                {% for i in 1..5 %}
+                                                    <i class="fas fa-star {% if i <= review.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>{{ review.comment|nl2br }}</p>
+                                            <small class="text-muted">{{ review.createdAt|date('d/m/Y') }}</small>
+                                            <span class="badge {% if review.status == 'approved' %}bg-success{% elseif review.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %} float-end">
+                                                {{ review.status == 'approved' ? 'Approuvé' : (review.status == 'pending' ? 'En attente' : 'Rejeté') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

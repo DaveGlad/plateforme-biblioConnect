@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_books') }}">Livres</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Informations du livre</h5>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.title) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.isbn) }}
+                        {{ form_widget(form.isbn, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.isbn) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        {{ form_label(form.author) }}
+                        {{ form_widget(form.author, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.author) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.language) }}
+                        {{ form_widget(form.language, {'attr': {'class': 'form-select'}}) }}
+                        {{ form_errors(form.language) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.publishYear) }}
+                        {{ form_widget(form.publishYear, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.publishYear) }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        {{ form_label(form.totalCopies) }}
+                        {{ form_widget(form.totalCopies, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.totalCopies) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_label(form.availableCopies) }}
+                        {{ form_widget(form.availableCopies, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.availableCopies) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.categories) }}
+                    <div class="categories-container">
+                        {{ form_widget(form.categories) }}
+                    </div>
+                    {{ form_errors(form.categories) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.coverImage) }}
+                    {{ form_widget(form.coverImage, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.coverImage) }}
+                    <small class="form-text text-muted">Formats acceptés : JPEG, PNG. Taille max : 2 Mo</small>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">{{ form.vars.data.id ? 'Enregistrer les modifications' : 'Ajouter le livre' }}</button>
+                    <a href="{{ path('admin_books') }}" class="btn btn-outline-secondary">Annuler</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+<style>
+    .categories-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .categories-container label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .categories-container input[type="checkbox"] {
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Utilisateurs</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Gestion des utilisateurs</h1>
+
+    <div class="mb-4">
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Liste des utilisateurs</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôles</th>
+                            <th>Réservations</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% for role in user.roles %}
+                                        {% if role == 'ROLE_ADMIN' %}
+                                            <span class="badge bg-danger">Administrateur</span>
+                                        {% elseif role == 'ROLE_LIBRARIAN' %}
+                                            <span class="badge bg-warning">Bibliothécaire</span>
+                                        {% elseif role == 'ROLE_USER' %}
+                                            <span class="badge bg-success">Utilisateur</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ user.reservations|length }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ path('admin_user_edit_role', {'id': user.id}) }}" class="btn btn-sm btn-primary" title="Modifier les rôles">
+                                            <i class="fas fa-user-cog"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
