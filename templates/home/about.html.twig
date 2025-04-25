@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">À propos de BibliothèqueOnline</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Notre mission</h2>
+                    <p class="card-text">
+                        BibliothèqueOnline est une plateforme moderne de gestion de bibliothèque conçue pour faciliter l'accès à la culture et au savoir.
+                        Notre mission est de rendre la lecture accessible à tous en offrant un service simple, pratique et efficace.
+                    </p>
+                    <p class="card-text">
+                        Grâce à notre plateforme, vous pouvez :
+                    </p>
+                    <ul>
+                        <li>Consulter notre catalogue complet de livres en ligne</li>
+                        <li>Rechercher des ouvrages par titre, auteur ou thème</li>
+                        <li>Réserver des livres et les récupérer à la bibliothèque</li>
+                        <li>Partager vos avis et découvrir les recommandations d'autres lecteurs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Notre histoire</h2>
+                    <p class="card-text">
+                        Fondée en 2023, BibliothèqueOnline est née de la volonté de moderniser l'accès aux ressources littéraires 
+                        et de créer une communauté de lecteurs passionnés.
+                    </p>
+                    <p class="card-text">
+                        Notre équipe, composée de bibliothécaires expérimentés et de développeurs talentueux, 
+                        travaille sans relâche pour vous offrir une expérience de lecture enrichissante et simplifiée.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Nos valeurs</h2>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-book-reader fa-3x text-primary mb-3"></i>
+                            <h5>Accès à la culture</h5>
+                            <p>Nous croyons que l'accès à la lecture est un droit fondamental.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                            <h5>Communauté</h5>
+                            <p>Nous encourageons le partage et les échanges entre les lecteurs.</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <i class="fas fa-laptop fa-3x text-primary mb-3"></i>
+                            <h5>Innovation</h5>
+                            <p>Nous utilisons la technologie pour améliorer l'expérience de lecture.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Horaires d'ouverture</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr><td>Lundi</td><td>9h - 18h</td></tr>
+                            <tr><td>Mardi</td><td>9h - 18h</td></tr>
+                            <tr><td>Mercredi</td><td>9h - 20h</td></tr>
+                            <tr><td>Jeudi</td><td>9h - 18h</td></tr>
+                            <tr><td>Vendredi</td><td>9h - 18h</td></tr>
+                            <tr><td>Samedi</td><td>10h - 17h</td></tr>
+                            <tr><td>Dimanche</td><td>Fermé</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Nous contacter</h5>
+                </div>
+                <div class="card-body">
+                    <address>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Rue de la Lecture, 75000 Paris, France</p>
+                        <p><i class="fas fa-phone-alt"></i> +33 1 23 45 67 89</p>
+                        <p><i class="fas fa-envelope"></i> contact@bibliothequeonline.fr</p>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

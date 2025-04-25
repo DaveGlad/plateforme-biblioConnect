@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier les rôles de l'utilisateur - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_users') }}">Utilisateurs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modifier les rôles</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Modifier les rôles de l'utilisateur</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Informations de l'utilisateur</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Nom :</strong> {{ user.firstName }} {{ user.lastName }}</p>
+                    <p><strong>Email :</strong> {{ user.email }}</p>
+                    <p><strong>Nombre de réservations :</strong> {{ user.reservations|length }}</p>
+                    <p><strong>Nombre d'avis :</strong> {{ user.reviews|length }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Attribuer des rôles</h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.roles) }}
+                            {{ form_widget(form.roles) }}
+                            {{ form_errors(form.roles) }}
+                            <small class="form-text text-muted">
+                                <ul>
+                                    <li>Utilisateur : Accès de base à la bibliothèque (recherche, réservation)</li>
+                                    <li>Bibliothécaire : Gestion du catalogue et des réservations</li>
+                                    <li>Administrateur : Accès complet à toutes les fonctionnalités</li>
+                                </ul>
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                            <a href="{{ path('admin_users') }}" class="btn btn-outline-secondary">Annuler</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Style pour les options de rôles */
+    div[id^="user_role_type_roles"] {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    div[id^="user_role_type_roles"] label {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: all 0.2s;
+    }
+    div[id^="user_role_type_roles"] label:hover {
+        background-color: #f8f9fa;
+    }
+    div[id^="user_role_type_roles"] input[type="checkbox"] {
+        margin-right: 10px;
+    }
+    div[id^="user_role_type_roles"] input[type="checkbox"]:checked + span {
+        font-weight: bold;
+    }
+    div[id^="user_role_type_roles"] label:has(input[type="checkbox"]:checked) {
+        background-color: #e9f3ff;
+        border-color: #0d6efd;
+    }
+</style>
+{% endblock %}

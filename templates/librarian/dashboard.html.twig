@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace bibliothécaire - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">Espace bibliothécaire</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total des livres</h5>
+                    <p class="card-text display-4">{{ stats.totalBooks }}</p>
+                    <a href="{{ path('librarian_books') }}" class="btn btn-sm btn-light">Gérer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Livres disponibles</h5>
+                    <p class="card-text display-4">{{ stats.availableBooks }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Réservations actives</h5>
+                    <p class="card-text display-4">{{ stats.activeReservations }}</p>
+                    <a href="{{ path('librarian_reservations') }}" class="btn btn-sm btn-light">Gérer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Réservations en attente</h5>
+                    <p class="card-text display-4">{{ stats.pendingReservations }}</p>
+                    <a href="{{ path('librarian_reservations') }}" class="btn btn-sm btn-light">Traiter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Actions rapides</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="{{ path('librarian_book_new') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus-circle me-2"></i>Ajouter un nouveau livre
+                        </a>
+                        <a href="{{ path('librarian_reservations') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-exchange-alt me-2"></i>Gérer les réservations
+                        </a>
+                        <a href="{{ path('librarian_books') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-book me-2"></i>Gérer le catalogue de livres
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Livres à stock faible</h5>
+                </div>
+                <div class="card-body">
+                    {% if lowStockBooks is empty %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>Tous les livres ont un stock suffisant.
+                        </div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Auteur</th>
+                                        <th>Disponibilité</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for book in lowStockBooks %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('book_show', {'id': book.id}) }}">{{ book.title }}</a>
+                                            </td>
+                                            <td>{{ book.author.fullName }}</td>
+                                            <td>
+                                                <span class="badge bg-warning">{{ book.availableCopies }}/{{ book.totalCopies }}</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

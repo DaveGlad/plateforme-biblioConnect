@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('user_profile') }}">Mon profil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>Modifier mon profil</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.firstName) }}
+                                {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.firstName) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.lastName) }}
+                                {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.lastName) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+
+                        <hr class="my-4">
+                        <h5>Changer de mot de passe</h5>
+                        <p class="text-muted small">Laissez vide si vous ne souhaitez pas modifier votre mot de passe</p>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.newPassword.first) }}
+                                {{ form_widget(form.newPassword.first, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.newPassword.first) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.newPassword.second) }}
+                                {{ form_widget(form.newPassword.second, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.newPassword.second) }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                            <a href="{{ path('user_profile') }}" class="btn btn-outline-secondary">Annuler</a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

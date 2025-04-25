@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des réservations - Bibliothécaire{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="mb-4">Gestion des réservations</h1>
+    
+    <div class="mb-4">
+        <a href="{{ path('librarian_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-white">
+            <h5 class="mb-0">Réservations en attente</h5>
+        </div>
+        <div class="card-body">
+            {% if pending_reservations is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucune réservation en attente.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Livre</th>
+                                <th>Date de réservation</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in pending_reservations %}
+                                <tr>
+                                    <td>{{ reservation.id }}</td>
+                                    <td>{{ reservation.user.fullName }}</td>
+                                    <td>{{ reservation.book.title }}</td>
+                                    <td>{{ reservation.reservationDate|date('d/m/Y H:i') }}</td>
+                                    <td>
+                                        <a href="{{ path('librarian_reservation_activate', {'id': reservation.id}) }}" class="btn btn-sm btn-success" title="Activer">
+                                            <i class="fas fa-check"></i> Activer
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Réservations actives</h5>
+        </div>
+        <div class="card-body">
+            {% if active_reservations is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucune réservation active.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Utilisateur</th>
+                                <th>Livre</th>
+                                <th>Date d'emprunt</th>
+                                <th>Date de retour prévue</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in active_reservations %}
+                                <tr class="{% if reservation.isOverdue %}table-danger{% endif %}">
+                                    <td>{{ reservation.id }}</td>
+                                    <td>{{ reservation.user.fullName }}</td>
+                                    <td>{{ reservation.book.title }}</td>
+                                    <td>{{ reservation.reservationDate|date('d/m/Y') }}</td>
+                                    <td>
+                                        {{ reservation.dueDate|date('d/m/Y') }}
+                                        {% if reservation.isOverdue %}
+                                            <span class="badge bg-danger">En retard</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Active</span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('librarian_reservation_return', {'id': reservation.id}) }}" class="btn btn-sm btn-primary" title="Marquer comme retourné">
+                                            <i class="fas fa-undo"></i> Retourné
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
