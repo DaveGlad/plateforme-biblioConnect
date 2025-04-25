@@ -1,0 +1,77 @@
+{# templates/admin/authors/form.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_authors') }}">Auteurs</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Informations de l'auteur</h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.firstName) }}
+                                {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.firstName) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.lastName) }}
+                                {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.lastName) }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.biography) }}
+                            {{ form_widget(form.biography, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.biography) }}
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_label(form.birthYear) }}
+                                {{ form_widget(form.birthYear, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.birthYear) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_label(form.deathYear) }}
+                                {{ form_widget(form.deathYear, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.deathYear) }}
+                                <small class="form-text text-muted">Laissez vide si l'auteur est toujours vivant</small>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                {% if author is defined %}
+                                    <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                                {% else %}
+                                    <i class="fas fa-plus-circle me-2"></i>Ajouter l'auteur
+                                {% endif %}
+                            </button>
+                            <a href="{{ path('admin_authors') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des auteurs - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Auteurs</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Gestion des auteurs</h1>
+
+    <div class="mb-4">
+        <a href="{{ path('admin_author_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Ajouter un nouvel auteur
+        </a>
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Liste des auteurs</h5>
+        </div>
+        <div class="card-body">
+            {% if authors is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun auteur n'est disponible pour le moment.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom complet</th>
+                                <th>Période</th>
+                                <th>Nombre de livres</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for author in authors %}
+                                <tr>
+                                    <td>{{ author.id }}</td>
+                                    <td>{{ author.fullName }}</td>
+                                    <td>
+                                        {% if author.birthYear %}
+                                            {{ author.birthYear }}
+                                            {% if author.deathYear %}
+                                                - {{ author.deathYear }}
+                                            {% endif %}
+                                        {% else %}
+                                            Non spécifiée
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ author.books.count }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('admin_author_edit', {'id': author.id}) }}" class="btn btn-sm btn-primary" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% if author.books.count == 0 %}
+                                                <a href="{{ path('admin_author_delete', {'id': author.id}) }}" class="btn btn-sm btn-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet auteur ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-danger" title="Cet auteur est associé à des livres et ne peut pas être supprimé" disabled>
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
