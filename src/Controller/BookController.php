@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Author;
 use App\Entity\Book;
+use App\Entity\Category;
 use App\Entity\Review;
 use App\Form\BookSearchType;
 use App\Form\ReviewType;
@@ -112,4 +114,26 @@ class BookController extends AbstractController
         
         return $this->redirectToRoute('user_reservations');
     }
+
+    #[Route('/category/{id}', name: 'book_by_category')]
+public function byCategory(Category $category, BookRepository $bookRepository): Response
+{
+    $books = $bookRepository->findByCategory($category);
+    
+    return $this->render('book/by_category.html.twig', [
+        'category' => $category,
+        'books' => $books,
+    ]);
+}
+
+#[Route('/author/{id}', name: 'book_by_author')]
+public function byAuthor(Author $author, BookRepository $bookRepository): Response
+{
+    $books = $bookRepository->findBy(['author' => $author]);
+    
+    return $this->render('book/by_author.html.twig', [
+        'author' => $author,
+        'books' => $books,
+    ]);
+}
 }
