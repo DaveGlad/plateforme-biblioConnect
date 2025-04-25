@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="jumbotron bg-light p-5 rounded mb-4">
+    <h1 class="display-4">Bienvenue à la BibliothèqueOnline</h1>
+    <p class="lead">Explorez notre catalogue, réservez des livres et partagez vos avis sur vos lectures.</p>
+    <hr class="my-4">
+    <p>Plus de 10 000 ouvrages disponibles dans notre bibliothèque numérique.</p>
+    <a class="btn btn-primary btn-lg" href="{{ path('book_index') }}" role="button">
+        Parcourir le catalogue <i class="fas fa-arrow-right ms-2"></i>
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-search fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Recherche facile</h5>
+                <p class="card-text">Trouvez rapidement des livres par titre, auteur ou catégorie dans notre catalogue complet.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Réservation en ligne</h5>
+                <p class="card-text">Réservez vos livres préférés en quelques clics et récupérez-les à la bibliothèque.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-star fa-3x mb-3 text-primary"></i>
+                <h5 class="card-title">Partagez vos avis</h5>
+                <p class="card-text">Notez et commentez vos lectures pour aider d'autres lecteurs à faire leur choix.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-4">Livres récemment ajoutés</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    {% for book in recent_books %}
+        <div class="col">
+            <div class="card h-100">
+                {% if book.coverImage %}
+                    <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="card-img-top" alt="{{ book.title }}">
+                {% else %}
+                    <div class="bg-light text-center py-5">
+                        <i class="fas fa-book fa-4x text-secondary"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ book.author.fullName }}</h6>
+                    <p class="card-text">{{ book.description|slice(0, 100) ~ (book.description|length > 100 ? '...' : '') }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('book_show', {'id': book.id}) }}" class="btn btn-sm btn-outline-primary">Voir détails</a>
+                    {% if book.isAvailable %}
+                        <a href="{{ path('book_reserve', {'id': book.id}) }}" class="btn btn-sm btn-primary float-end">Réserver</a>
+                    {% else %}
+                        <span class="badge bg-secondary float-end">Indisponible</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>Aucun livre récent n'est disponible pour le moment.
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
