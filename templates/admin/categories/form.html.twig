@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }} - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('admin_categories') }}">Catégories</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">{{ title }}</h1>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Informations de la catégorie</h5>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(form.description) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.description) }}
+                            <small class="form-text text-muted">Une brève description de cette catégorie (facultatif).</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                {% if category is defined %}
+                                    <i class="fas fa-save me-2"></i>Enregistrer les modifications
+                                {% else %}
+                                    <i class="fas fa-plus-circle me-2"></i>Ajouter la catégorie
+                                {% endif %}
+                            </button>
+                            <a href="{{ path('admin_categories') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Annuler
+                            </a>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
