@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des catégories - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Catégories</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Gestion des catégories</h1>
+
+    <div class="mb-4">
+        <a href="{{ path('admin_category_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus-circle me-2"></i>Ajouter une nouvelle catégorie
+        </a>
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Liste des catégories</h5>
+        </div>
+        <div class="card-body">
+            {% if categories is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucune catégorie n'est disponible pour le moment.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Description</th>
+                                <th>Nombre de livres</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                                <tr>
+                                    <td>{{ category.id }}</td>
+                                    <td>{{ category.name }}</td>
+                                    <td>{{ category.description|default('Aucune description') }}</td>
+                                    <td>{{ category.books.count }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ path('admin_category_edit', {'id': category.id}) }}" class="btn btn-sm btn-primary" title="Modifier">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            {% if category.books.count == 0 %}
+                                                <a href="{{ path('admin_category_delete', {'id': category.id}) }}" class="btn btn-sm btn-danger" title="Supprimer" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-danger" title="Cette catégorie est utilisée par des livres et ne peut pas être supprimée" disabled>
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
