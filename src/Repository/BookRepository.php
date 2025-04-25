@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -110,4 +111,34 @@ class BookRepository extends ServiceEntityRepository
         
         return $query->getResult();
     }
+
+    /**
+ * Trouve les livres par catégorie
+ */
+public function findByCategory(Category $category): array
+{
+    return $this->createQueryBuilder('b')
+        ->leftJoin('b.author', 'a')
+        ->leftJoin('b.language', 'l')
+        ->addSelect('a', 'l')
+        ->andWhere(':category MEMBER OF b.categories')
+        ->setParameter('category', $category)
+        ->orderBy('b.title', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
+
+/**
+ * Obtient les statistiques de stock par langue
+ */
+public function getStockStatsByLanguage(): array
+{
+    $qb = $this->createQueryBuilder('b')
+        ->select('l.id, l.name, l.code, COUNT(b.id) as totalBooks, SUM(b.totalCopies) as totalCopies, SUM(b.availableCopies) as availableCopies')
+        ->leftJoin('b.language', 'l')
+        ->groupBy('l.id')
+        ->orderBy('l.name', 'ASC');
+    
+    return $qb->getQuery()->getResult();
+}
 }

@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques de stock - Administration{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Statistiques de stock</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Statistiques de stock par langue</h1>
+
+    <div class="mb-4">
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au tableau de bord
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Stock par langue</h5>
+        </div>
+        <div class="card-body">
+            {% if stockByLanguage is empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun livre n'est disponible pour le moment.
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Langue</th>
+                                <th>Code</th>
+                                <th>Nombre de titres</th>
+                                <th>Exemplaires totaux</th>
+                                <th>Exemplaires disponibles</th>
+                                <th>Taux de disponibilité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in stockByLanguage %}
+                                <tr>
+                                    <td>{{ stat.name }}</td>
+                                    <td><code>{{ stat.code }}</code></td>
+                                    <td>{{ stat.totalBooks }}</td>
+                                    <td>{{ stat.totalCopies }}</td>
+                                    <td>{{ stat.availableCopies }}</td>
+                                    <td>
+                                        {% if stat.totalCopies > 0 %}
+                                            {% set availability = (stat.availableCopies / stat.totalCopies * 100)|round %}
+                                            <div class="progress">
+                                                <div class="progress-bar {% if availability < 30 %}bg-danger{% elseif availability < 70 %}bg-warning{% else %}bg-success{% endif %}" 
+                                                     role="progressbar" 
+                                                     style="width: {{ availability }}%" 
+                                                     aria-valuenow="{{ availability }}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="100">
+                                                    {{ availability }}%
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Aucun exemplaire</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Résumé</h5>
+                    <div class="row">
+                        {% set totalTitles = 0 %}
+                        {% set totalCopies = 0 %}
+                        {% set totalAvailable = 0 %}
+                        
+                        {% for stat in stockByLanguage %}
+                            {% set totalTitles = totalTitles + stat.totalBooks %}
+                            {% set totalCopies = totalCopies + stat.totalCopies %}
+                            {% set totalAvailable = totalAvailable + stat.availableCopies %}
+                        {% endfor %}
+                        
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Titres uniques</h5>
+                                    <p class="card-text display-6">{{ totalTitles }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Exemplaires totaux</h5>
+                                    <p class="card-text display-6">{{ totalCopies }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">Exemplaires disponibles</h5>
+                                    <p class="card-text display-6">{{ totalAvailable }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

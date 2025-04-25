@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres : {{ category.name }} - BibliothèqueOnline{% endblock %}
+
+{% block body %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('book_index') }}">Catalogue</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Catégorie : {{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">Livres dans la catégorie "{{ category.name }}"</h1>
+    
+    {% if category.description %}
+        <div class="alert alert-info mb-4">
+            {{ category.description }}
+        </div>
+    {% endif %}
+    
+    <div class="mb-4">
+        <a href="{{ path('book_index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour au catalogue
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for book in books %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if book.coverImage %}
+                        <img src="{{ asset('uploads/covers/' ~ book.coverImage) }}" class="card-img-top" alt="{{ book.title }}">
+                    {% else %}
+                        <div class="bg-light text-center py-5">
+                            <i class="fas fa-book fa-4x text-secondary"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ book.author.fullName }}</h6>
+                        <p class="card-text">{{ book.description|slice(0, 100) ~ (book.description|length > 100 ? '...' : '') }}</p>
+                        
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge {% if book.isAvailable %}bg-success{% else %}bg-danger{% endif %} me-2">
+                                {{ book.isAvailable ? 'Disponible' : 'Indisponible' }}
+                            </span>
+                            <small class="text-muted">
+                                {{ book.availableCopies }} / {{ book.totalCopies }} exemplaires
+                            </small>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ path('book_show', {'id': book.id}) }}" class="btn btn-sm btn-outline-primary">Voir détails</a>
+                        {% if book.isAvailable and is_granted('ROLE_USER') %}
+                            <a href="{{ path('book_reserve', {'id': book.id}) }}" class="btn btn-sm btn-primary float-end">Réserver</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Aucun livre n'est disponible dans cette catégorie pour le moment.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

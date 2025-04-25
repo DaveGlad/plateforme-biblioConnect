@@ -175,4 +175,14 @@ class AdminController extends AbstractController
             'reservations' => $reservationRepository->findAll()
         ]);
     }
+
+    #[Route('/stock', name: 'admin_stock')]
+public function stockStats(BookRepository $bookRepository): Response
+{
+    $stockByLanguage = $bookRepository->getStockStatsByLanguage();
+    
+    return $this->render('admin/stock.html.twig', [
+        'stockByLanguage' => $stockByLanguage,
+    ]);
+}
 }
